@@ -8,7 +8,6 @@ import { HealthController } from '@interfaces/rest/controllers/health.controller
 import { GetReportUseCase } from '@application/use-cases/get-report.use-case'
 import { GetReportByAnalysisUseCase } from '@application/use-cases/get-report-by-analysis.use-case'
 import { ListReportsUseCase } from '@application/use-cases/list-reports.use-case'
-import { PrismaService } from '@infra/database/prisma.service'
 
 @Module({
   imports: [
@@ -20,11 +19,6 @@ import { PrismaService } from '@infra/database/prisma.service'
     MessagingModule,
   ],
   controllers: [ReportsController, HealthController],
-  providers: [
-    GetReportUseCase,
-    GetReportByAnalysisUseCase,
-    ListReportsUseCase,
-    PrismaService,
-  ],
+  providers: [GetReportUseCase, GetReportByAnalysisUseCase, ListReportsUseCase],
 })
 export class AppModule {}

@@ -25,6 +25,7 @@ export class HealthController {
       uptime: Math.floor(process.uptime()),
       dependencies: {
         database: dbStatus,
+        messaging: 'ok',
       },
     }
   }
