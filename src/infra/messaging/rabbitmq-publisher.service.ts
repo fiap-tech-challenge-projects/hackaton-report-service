@@ -70,7 +70,10 @@ export class RabbitmqPublisherService implements IEventPublisher, OnModuleInit, 
       }
 
       const message = Buffer.from(JSON.stringify(envelope))
-      this.channel.publish('hackaton-events', 'report.generated', message, { persistent: true })
+      this.channel.publish('hackaton-events', 'report.generated', message, {
+        persistent: true,
+        contentType: 'application/json',
+      })
 
       this.logger.log(
         `Published report.generated event analysisId=${payload.analysisId} reportId=${payload.reportId}`,
