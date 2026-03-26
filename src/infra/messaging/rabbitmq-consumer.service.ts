@@ -26,13 +26,19 @@ export class RabbitmqConsumerService implements OnModuleInit, OnModuleDestroy {
     await this.disconnect()
   }
 
-  private async connect() {
+  private async connect(retryCount = 0) {
     try {
-      const url = this.configService.get<string>('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672')
+      const url = this.configService.get<string>(
+        'RABBITMQ_URL',
+        'amqp://guest:guest@localhost:5672',
+      )
       this.connection = await amqplib.connect(url)
       this.channel = await this.connection.createChannel()
 
+      await this.channel.assertExchange('hackaton-events', 'topic', { durable: true })
+
       await this.channel.assertQueue('analysis.processed', { durable: true })
+      await this.channel.bindQueue('analysis.processed', 'hackaton-events', 'analysis.processed')
 
       // DLQ setup
       await this.channel.assertQueue('analysis.dlq', { durable: true })
@@ -54,7 +60,16 @@ export class RabbitmqConsumerService implements OnModuleInit, OnModuleDestroy {
 
       this.logger.log('RabbitMQ consumer connected, listening on analysis.processed')
     } catch (error) {
-      this.logger.error(`Failed to connect RabbitMQ consumer: ${error.message}`)
+      const maxRetries = 10
+      const retryDelay = Math.min(5000 * (retryCount + 1), 30000)
+      this.logger.error(
+        `Failed to connect RabbitMQ consumer: ${error.message}. Retry ${retryCount + 1}/${maxRetries} in ${retryDelay}ms`,
+      )
+      if (retryCount < maxRetries) {
+        setTimeout(() => this.connect(retryCount + 1), retryDelay)
+      } else {
+        this.logger.error('Max retries reached. RabbitMQ consumer will not start.')
+      }
     }
   }
 

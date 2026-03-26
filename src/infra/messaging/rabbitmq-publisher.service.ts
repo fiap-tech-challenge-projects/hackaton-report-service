@@ -26,11 +26,14 @@ export class RabbitmqPublisherService implements IEventPublisher, OnModuleInit, 
 
   private async connect() {
     try {
-      const url = this.configService.get<string>('RABBITMQ_URL', 'amqp://guest:guest@localhost:5672')
+      const url = this.configService.get<string>(
+        'RABBITMQ_URL',
+        'amqp://guest:guest@localhost:5672',
+      )
       this.connection = await amqplib.connect(url)
       this.channel = await this.connection.createChannel()
 
-      await this.channel.assertQueue('report.generated', { durable: true })
+      await this.channel.assertExchange('hackaton-events', 'topic', { durable: true })
 
       this.logger.log('RabbitMQ publisher connected')
     } catch (error) {
@@ -67,7 +70,7 @@ export class RabbitmqPublisherService implements IEventPublisher, OnModuleInit, 
       }
 
       const message = Buffer.from(JSON.stringify(envelope))
-      this.channel.sendToQueue('report.generated', message, { persistent: true })
+      this.channel.publish('hackaton-events', 'report.generated', message, { persistent: true })
 
       this.logger.log(
         `Published report.generated event analysisId=${payload.analysisId} reportId=${payload.reportId}`,
