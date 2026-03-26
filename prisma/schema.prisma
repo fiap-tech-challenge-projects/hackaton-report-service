@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Report {
+  id              String   @id @default(uuid())
+  analysisId      String   @unique @map("analysis_id")
+  title           String
+  summary         String   @db.Text
+  components      Json
+  risks           Json
+  recommendations Json
+  metadata        Json
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([analysisId])
+  @@index([createdAt(sort: Desc)])
+  @@map("reports")
+}
