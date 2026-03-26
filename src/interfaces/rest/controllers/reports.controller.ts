@@ -1,18 +1,5 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Query,
-  HttpStatus,
-  NotFoundException,
-} from '@nestjs/common'
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiParam,
-  ApiQuery,
-} from '@nestjs/swagger'
+import { Controller, Get, Param, Query, HttpStatus, NotFoundException } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger'
 import { GetReportUseCase } from '@application/use-cases/get-report.use-case'
 import { GetReportByAnalysisUseCase } from '@application/use-cases/get-report-by-analysis.use-case'
 import { ListReportsUseCase } from '@application/use-cases/list-reports.use-case'
@@ -29,8 +16,18 @@ export class ReportsController {
 
   @Get('reports')
   @ApiOperation({ summary: 'List all reports with pagination' })
-  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Page number (default: 1)' })
-  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Items per page (default: 10, max: 100)' })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number (default: 1)',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Items per page (default: 10, max: 100)',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'List of reports with pagination metadata',

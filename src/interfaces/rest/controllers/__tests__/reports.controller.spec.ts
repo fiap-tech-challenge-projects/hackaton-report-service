@@ -168,10 +168,14 @@ describe('ReportsController', () => {
 
     it('should throw NotFoundException when no report found for analysis', async () => {
       getReportByAnalysisUseCase.execute.mockRejectedValue(
-        new NotFoundException('Report not found for this analysis. The analysis may still be processing.'),
+        new NotFoundException(
+          'Report not found for this analysis. The analysis may still be processing.',
+        ),
       )
 
-      await expect(controller.getReportByAnalysis('non-existent')).rejects.toThrow(NotFoundException)
+      await expect(controller.getReportByAnalysis('non-existent')).rejects.toThrow(
+        NotFoundException,
+      )
     })
   })
 })

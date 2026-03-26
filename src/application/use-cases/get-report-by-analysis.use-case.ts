@@ -17,7 +17,9 @@ export class GetReportByAnalysisUseCase {
     const report = await this.reportRepository.findByAnalysisId(analysisId)
 
     if (!report) {
-      throw new NotFoundException(`Report not found for this analysis. The analysis may still be processing.`)
+      throw new NotFoundException(
+        `Report not found for this analysis. The analysis may still be processing.`,
+      )
     }
 
     return ReportMapper.toResponseDto(report)

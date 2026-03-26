@@ -33,7 +33,9 @@ async function bootstrap() {
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Report Service API')
-    .setDescription('Report Service - Generates and serves structured technical reports from diagram analysis')
+    .setDescription(
+      'Report Service - Generates and serves structured technical reports from diagram analysis',
+    )
     .setVersion('1.0')
     .addTag('reports', 'Report management endpoints')
     .addTag('health', 'Health check endpoints')

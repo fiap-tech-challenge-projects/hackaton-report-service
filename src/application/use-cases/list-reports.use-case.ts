@@ -20,7 +20,7 @@ export class ListReportsUseCase {
     const { reports, total } = await this.reportRepository.findAll({ page, limit })
 
     return {
-      data: reports.map(r => ReportMapper.toSummaryDto(r)),
+      data: reports.map((r) => ReportMapper.toSummaryDto(r)),
       meta: {
         page,
         limit,

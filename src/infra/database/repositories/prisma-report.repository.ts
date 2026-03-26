@@ -1,6 +1,16 @@
 import { Injectable } from '@nestjs/common'
-import { Report, ReportComponent, ReportRisk, ReportRecommendation, ReportMetadata } from '@domain/entities/report.entity'
-import { IReportRepository, FindAllOptions, FindAllResult } from '@domain/repositories/report.repository'
+import {
+  Report,
+  ReportComponent,
+  ReportRisk,
+  ReportRecommendation,
+  ReportMetadata,
+} from '@domain/entities/report.entity'
+import {
+  IReportRepository,
+  FindAllOptions,
+  FindAllResult,
+} from '@domain/repositories/report.repository'
 import { PrismaService } from '../prisma.service'
 
 /**
@@ -58,7 +68,7 @@ export class PrismaReportRepository implements IReportRepository {
     ])
 
     return {
-      reports: reports.map(r => this.toDomain(r)),
+      reports: reports.map((r) => this.toDomain(r)),
       total,
     }
   }
